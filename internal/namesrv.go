@@ -56,12 +56,6 @@ func NewNamesrv(s ...string) (*Namesrvs, error) {
 		ss = strings.Split(s[0], ";")
 	}
 
-	for _, srv := range ss {
-		if err := verifyIP(srv); err != nil {
-			return nil, err
-		}
-	}
-
 	return &Namesrvs{
 		srvs: ss,
 		lock: new(sync.Mutex),
@@ -89,19 +83,4 @@ func (s *Namesrvs) Size() int {
 
 func (s *Namesrvs) String() string {
 	return strings.Join(s.srvs, ";")
-}
-
-func verifyIP(ip string) error {
-	if strings.Contains(ip, ";") {
-		return ErrMultiIP
-	}
-	ips := ipRegex.FindAllString(ip, -1)
-	if len(ips) == 0 {
-		return ErrIllegalIP
-	}
-
-	if len(ips) > 1 {
-		return ErrMultiIP
-	}
-	return nil
 }
