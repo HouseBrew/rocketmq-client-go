@@ -41,11 +41,11 @@ func NewNamesrvAddr(s ...string) (NamesrvAddr, error) {
 
 	// relaxed constraint for docker interal hostnames
 
-	// for _, srv := range ss {
-	// 	if err := verifyIP(srv); err != nil {
-	// 		return nil, err
-	// 	}
-	// }
+	for _, srv := range ss {
+		if err := verifyIP(srv); err != nil {
+			return nil, err
+		}
+	}
 
 	addrs := make(NamesrvAddr, 0)
 	addrs = append(addrs, ss...)
@@ -72,13 +72,13 @@ func verifyIP(ip string) error {
 	if strings.Contains(ip, ";") {
 		return ErrMultiIP
 	}
-	ips := ipRegex.FindAllString(ip, -1)
-	if len(ips) == 0 {
-		return ErrIllegalIP
-	}
+	// ips := ipRegex.FindAllString(ip, -1)
+	// if len(ips) == 0 {
+	// 	return ErrIllegalIP
+	// }
 
-	if len(ips) > 1 {
-		return ErrMultiIP
-	}
+	// if len(ips) > 1 {
+	// 	return ErrMultiIP
+	// }
 	return nil
 }
